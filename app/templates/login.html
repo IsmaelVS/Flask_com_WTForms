@@ -1,10 +1,14 @@
-<form action = "http://localhost:5000/check_login" method = post>
-    {% for field in form %}
+<html>
+  <fieldset>
+    <form action = "http://localhost:5000/check_login" method = post>
+      {% for field in form %}
         <tr>
-            <th>{{ field.label }}</th>
-            <td>{{ field }}</td>
-            <br>
+          <th>{{ field.label }}</th>
+          <td>{{ field }}</td>
+          <br>
         </tr>
-    {% endfor %}
-    {{form.submit}}
-</form>
+      {% endfor %}
+      {{form.submit}}
+    </form>
+  </fieldset>
+</html>
