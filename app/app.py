@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 class Login(Form):
     u"""Classe para montar o formulário."""
+
     login = StringField()
     password = PasswordField()
     btn = SubmitField('Logar', )
