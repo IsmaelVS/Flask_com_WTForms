@@ -1,7 +1,8 @@
-
+# coding: utf-8
 u"""Formulário web utilizando Flask e WTForms."""
 
 from flask import Flask, render_template, request
+
 from wtforms import Form, PasswordField, StringField, SubmitField
 
 app = Flask(__name__)
