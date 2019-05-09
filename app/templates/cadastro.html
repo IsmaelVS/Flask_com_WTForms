@@ -1,0 +1,15 @@
+<html>
+  <h1>Tela de cadastro</h1>
+  <fieldset>
+    <form action = "http://localhost:5000/checar_cadastro" method = post>
+      {% for field in form %}
+        <tr>
+          <th>{{ field.label }}</th>
+          <td>{{ field }}</td>
+          <br>
+        </tr>
+      {% endfor %}
+      {{form.submit}}
+    </form>
+  </fieldset>
+</html>
