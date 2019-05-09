@@ -9,6 +9,9 @@
           <br>
         </tr>
       {% endfor %}
+      {% if error %}
+        <p>Usuário ou senha incorreta</p>
+      {% endif%}
       {{form.submit}}
     </form>
   </fieldset>

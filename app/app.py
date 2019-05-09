@@ -12,17 +12,17 @@ users = {}
 class Login(Form):
     """Classe para montar o formulário."""
 
-    login = StringField()
-    password = PasswordField()
+    login = StringField('Username')
+    password = PasswordField('Password')
     btn = SubmitField('Logar')
 
 
 class Cadastro(Form):
     """Classe para montar o formulário de cadastro."""
 
-    login = StringField()
-    password = PasswordField()
-    btn = SubmitField('Logar')
+    login = StringField('Username')
+    password = PasswordField('Password')
+    btn = SubmitField('Cadastrar')
 
 
 @app.route('/login')
@@ -36,7 +36,7 @@ def check_login():
     """Rota para validar dados do formulário."""
     if validate_login(request.form['login'], request.form['password']):
         return 'Logado com sucesso!!'
-    return 'Usuário ou senha inválido'
+    return render_template('login.html', form=Login(), error=True)
 
 
 def validate_login(user, senha):
@@ -56,5 +56,4 @@ def checar_cadastro():
     if request.form['login'] not in users:
         users.update({request.form['login']: request.form['password']})
         return render_template('login.html', form=Login())
-    else:
-        return 'Usuário já existente'
+    return render_template('cadastro.html', form=Login(), error=True)
