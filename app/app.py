@@ -2,11 +2,31 @@
 """Formulário web utilizando Flask e WTForms."""
 
 from flask import Flask, render_template, request
+from flask.ext.sqlachemy import SQLAlchemy
 
+from flask_login import LoginManager
 from wtforms import Form, PasswordField, StringField, SubmitField
 
 app = Flask(__name__)
 users = {}
+
+db = SQLAlchemy(app)
+
+lm = LoginManager(app)
+
+
+class Usuario(db.Model):
+    """Classe para criação da tabela usuário no banco."""
+
+    __tablename__ = 'usuario'
+
+    _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String)
+    password = db.Column(db.String)
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
 
 
 class Login(Form):
@@ -53,7 +73,9 @@ def home():
 @app.route('/checar_cadastro', methods=['POST'])
 def checar_cadastro():
     """Rota para checar cadastro."""
-    if request.form['login'] not in users:
-        users.update({request.form['login']: request.form['password']})
-        return render_template('login.html', form=Login())
-    return render_template('cadastro.html', form=Login(), error=True)
+    username = request.form['login']
+    password = request.form['password']
+    user = Usuario(username, password)
+    db.session.add(user)
+    db.session.commit()
+    return render_template('login.html', form=Login())
