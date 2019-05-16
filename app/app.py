@@ -2,13 +2,12 @@
 """Formulário web utilizando Flask e WTForms."""
 
 from flask import Flask, render_template, request
-from flask.ext.sqlachemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 
 from flask_login import LoginManager
 from wtforms import Form, PasswordField, StringField, SubmitField
 
 app = Flask(__name__)
-users = {}
 
 db = SQLAlchemy(app)
 
@@ -25,6 +24,7 @@ class Usuario(db.Model):
     password = db.Column(db.String)
 
     def __init__(self, username, password):
+        db.create_all()
         self.username = username
         self.password = password
 
