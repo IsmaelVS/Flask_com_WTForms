@@ -61,7 +61,8 @@ def check_login():
 
 def validate_login(user, senha):
     """Função de validação dos dados do formulário."""
-    return db.session.query(Usuario).filter_by(username=user).first()
+    return db.session.query(Usuario).filter_by(
+        username=user, password=senha).first()
 
 
 @app.route('/')
