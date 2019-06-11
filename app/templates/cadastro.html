@@ -1,19 +1,19 @@
-<html>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Página de cadastro{% endblock %}
+{% block content %}
   <h1>Tela de cadastro</h1>
+  <hr>
   <fieldset>
-    <legend>Cadastro</legend>
-    <form action = "http://localhost:5000/checar_cadastro" method = post>
-      {% for field in form %}
-        <tr>
-          <th>{{ field.label }}</th>
-          <td>{{ field }}</td>
+    <form action="/checar_cadastro" method="post">
+      {{ form.csrf_token }}
+          {{ wtf.form_field(form.login, class='form-control', placeholder='Nome Sobrenome') }}</th>
+          {{ wtf.form_field(form.password, class='form-control', placeholder='******') }}</td>
           <br>
-        </tr>
-      {% endfor %}
       {% if error %}
         <p>Usuário já existente</p>
       {% endif%}
-      {{form.submit}}
+      {{ wtf.form_field(form.btn, class='btn btn-block btn-success') }}
     </form>
   </fieldset>
-</html>
+{% endblock %}

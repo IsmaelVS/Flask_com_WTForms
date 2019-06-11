@@ -4,10 +4,14 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
+from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from wtforms import Form, PasswordField, StringField, SubmitField
+from wtforms.validators import Email, Length, Required
 
 app = Flask(__name__)
+
+Bootstrap(app)
 
 db = SQLAlchemy(app)
 
@@ -24,24 +28,27 @@ class Usuario(db.Model):
     password = db.Column(db.String)
 
     def __init__(self, username, password):
-        db.create_all()
         self.username = username
         self.password = password
+
+
+db.create_all()
 
 
 class Login(Form):
     """Classe para montar o formulário."""
 
-    login = StringField('Username')
-    password = PasswordField('Password')
+    login = StringField('Username', validators=[Required(), Email()])
+    password = PasswordField('Password', validators=[Required()])
     btn = SubmitField('Logar')
 
 
 class Cadastro(Form):
     """Classe para montar o formulário de cadastro."""
 
-    login = StringField('Username')
-    password = PasswordField('Password')
+    login = StringField('Username',  validators=[Required(), Email()])
+    password = PasswordField('Password', validators=[Required(),
+                                                     Length(min=6)])
     btn = SubmitField('Cadastrar')
 
 
@@ -76,7 +83,14 @@ def checar_cadastro():
     """Rota para checar cadastro."""
     username = request.form['login']
     password = request.form['password']
-    user = Usuario(username, password)
-    db.session.add(user)
-    db.session.commit()
-    return render_template('login.html', form=Login())
+    if not validar_cadastro(username, password):
+        user = Usuario(username, password)
+        db.session.add(user)
+        db.session.commit()
+        return render_template('login.html', form=Login())
+    return render_template('cadastro.html', form=Login(), error=True)
+
+
+def validar_cadastro(user, password):
+    """Função de validação do cadastro."""
+    return len(Usuario.query.filter_by(username=user).all()) > 0
